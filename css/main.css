@@ -1,0 +1,123 @@
+@CHARSET "UTF-8";
+body 
+{ 
+	margin: 0px; 
+}
+#coverscreen
+{
+	overflow: hidden;
+	height: 100%;
+	width: 100%;
+	background-color: black;
+	float: left;
+}
+#main
+{
+	overflow: hidden;
+	height: 100%;
+	width: 100%;
+	background-color: white;
+	padding: 5px;
+}
+#left
+{
+	float: left;
+	width: 200px;
+	margin-right: 5px;
+}
+#party
+{
+	height: 500px;
+	margin-bottom: 5px;
+	background-color: lightgrey;
+}
+#menu
+{
+	height: 100px;
+	background-color: lightgrey;
+}
+#right
+{
+	float: left;
+	width: 600px;
+}
+#game
+{
+	overflow: hidden;
+	height: 500px;
+	margin-bottom: 5px;
+}
+#console
+{
+	overflow-y: scroll;
+	overflow-x: hidden;
+	height: 90px;
+	background-color: black;
+	color: white;
+	padding:5px;
+}
+div.member
+{
+	width: 90px;
+	height: 100px;
+	margin: 4px;
+	border: 1px solid black;
+	float: left;
+	background-color: white;
+	position: relative;
+}
+div.bars
+{
+	position: absolute;
+	bottom: 0;
+	height: 10px;
+	width: 100%;
+}
+div.bar
+{
+	position: relative;
+	width: 100%;
+	height: 5px;
+}
+div.hp
+{
+	bottom: 0px;
+	background-color: red;
+}
+div.mana
+{
+	top: 0px;
+	background-color: blue;
+}
+img.crosshair
+{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 32px;
+	height: 32px;
+	margin-top: -16x;
+	margin-left: -16px;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -o-crisp-edges;
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: optimize-contrast;
+	-ms-interpolation-mode: nearest-neighbor;
+	display: none;
+}
+#monster_image
+{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 32px;
+	height: 32px;
+	margin-top: -16x;
+	margin-left: -16px;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -o-crisp-edges;
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: optimize-contrast;
+	-ms-interpolation-mode: nearest-neighbor;
+	display: none;
+}
