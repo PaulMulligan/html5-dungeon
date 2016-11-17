@@ -289,6 +289,10 @@
 			};
 			
 			$("#attack").click(clickAttack);
+			$("#skill").click(clickSkill);
+			$("#defend").click(clickDefend);
+			$("#item").click(clickItem);
+			$("#flee").click(clickFlee);
 			
 			function clickAttack()
 			{
@@ -310,6 +314,36 @@
 					}
 				}
 			};
+			
+			function clickSkill()
+			{
+			    consoleLog("You don't have any skills yet.");
+			}
+			
+			function clickDefend()
+			{
+			    if(mode == 'battle')
+				{
+				    consoleLog("You defend!");
+				    consoleLog("The slime slimes you for 0 damage!");
+				}
+			}
+			
+			function clickItem()
+			{
+			    consoleLog("You are not carrying anything.");
+			}
+			
+			function clickFlee()
+			{
+			    if(mode == 'battle')
+				{
+				    consoleLog("You flee!");
+					$("#monster_image").hide();
+					lock = false;
+					mode = 'move';
+				}
+			}
 			
 			function updateHP() {
 			    var hpwidth = ((playerHP/playerMaxHP)*100) + "%";
