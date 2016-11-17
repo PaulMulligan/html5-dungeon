@@ -35,7 +35,13 @@
 						</div>
 					</div>
 				</div>
-				<div id = "menu"></div>
+				<div id = "menu">
+					<div id = "attack" class = "command">Attack</div>
+					<div id = "skill" class = "command">Skill</div>
+					<div id = "defend" class = "command">Defend</div>
+					<div id = "item" class = "command">Item</div>
+					<div id = "flee" class = "command">Flee</div>
+				</div>
 			</div>
 			<div id = "right">
 				<div id = "game">
@@ -253,6 +259,7 @@
 			var mode = 'move';
 
 			var playerHP = 10;
+			var playerMaxHP = 10;
 			var slimeHP = 5;
 
 			var render = function () {
@@ -267,14 +274,12 @@
 					{
 						particles[i].update();
 					}
-				} else {
-					handleBattle();
 				}
 				renderer.render(scene, camera);
 				if(monsterGenerated)
 				{
 					monsterGenerated = false;
-					$("#console > p").text("You encountered a slime!");
+					consoleLog("You encountered a slime!");
 					slimeHP = 5;
 					lock = true;
 					$("#monster_image").attr("src",'./images/goon.png');
@@ -283,9 +288,11 @@
 				}
 			};
 			
-			function handleBattle()
+			$("#attack").click(clickAttack);
+			
+			function clickAttack()
 			{
-				if(keydown == true && keyboard.pressed("X"))
+				if(mode == 'battle')
 				{
 					var playerDamage = Math.floor((Math.random() * 2) + 1);
 					slimeHP -= playerDamage;
@@ -293,32 +300,41 @@
 						endBattle();
 					} else {
 						playerHP -= 1;
+						updateHP();
 						if(playerHP <= 0) {
 							lose();
 						} else {
-							$("#console > p").text("You bonk the slime for " + playerDamage + " damage!\n"
-							+ "The slime slimes you for 1 damage!");
+						    consoleLog("You bonk the slime for " + playerDamage + " damage!");
+						    consoleLog("The slime slimes you for 1 damage!");
 						}
 					}
-					keydown = false;
 				}
-			}
+			};
+			
+			function updateHP() {
+			    var hpwidth = ((playerHP/playerMaxHP)*100) + "%";
+			    $("#hp1").css("width", hpwidth);
+			};
 			
 			function lose()
 			{
-				$("#console > p").text("The slime defeated you!");
+			    consoleLog("The slime defeated you!");
 				lock = false;
 				mode = 'dead';
 			}
 			
 			function endBattle()
 			{
-				$("#console > p").text("You defeated the slime!");
+			    consoleLog("You defeated the slime!");
 				$("#monster_image").hide();
 				lock = false;
 				mode = 'move';
 			}
 			
+			function consoleLog(text) {
+			    $("#console").append("<p>" + text + "</p>");
+			    $("#console").scrollTop($("#console")[0].scrollHeight);
+			}
 			
 			function generateMonster()
 			{

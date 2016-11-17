@@ -27,14 +27,15 @@ body
 }
 #party
 {
-	height: 500px;
+	height: 225px;
 	margin-bottom: 5px;
 	background-color: lightgrey;
 }
 #menu
 {
-	height: 100px;
+	height: 375px;
 	background-color: lightgrey;
+	padding: 10px;
 }
 #right
 {
@@ -65,6 +66,11 @@ div.member
 	float: left;
 	background-color: white;
 	position: relative;
+	visibility: hidden;
+}
+#member1
+{
+	visibility: visible;
 }
 div.bars
 {
@@ -88,6 +94,28 @@ div.mana
 {
 	top: 0px;
 	background-color: blue;
+}
+div.command
+{
+	border: 1px solid black;
+	border-radius: 5px;
+	background-color: white;
+	color: black;
+	width: 90%;
+	margin: auto;
+	height: 20px;
+	margin-top: 5px;
+	padding: 2px;
+}
+div.command:hover
+{
+	font-style: italic;
+	background-color: lightgrey;
+}
+div.command:active
+{
+	color: white;
+	background-color: black;
 }
 img.crosshair
 {
