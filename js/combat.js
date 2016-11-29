@@ -1,14 +1,4 @@
 var encounter = {};
-var player = {
-        maxhp: 10,
-        hp: 10,
-        attack: 2,
-        defense: 0,
-        exp: 0,
-        level: 1,
-        skills: []
-};
-$("#hp1").attr("title", "10");
 
 var skills = {
         drain: {
@@ -17,10 +7,11 @@ var skills = {
             description: "Attempt to heal yourself while striking down an enemy. Only works on weakened foes.",
             effect: function() {
                 var damage = player.attack/2;
-                if (damage > encounter.monster.hp) {
+                if (damage >= encounter.monster.hp) {
                     encounter.monster.hp = 0;
-                    var healQuantity = Math.floor(encounter.monster.hp/2);
+                    var healQuantity = Math.floor(encounter.monster.maxhp/2);
                     heal(player, healQuantity);
+                    consoleLog("You strike with dark magic!");
                     consoleLog("You are healed for " + healQuantity + " health!");
                 } else {
                     consoleLog("The enemy is too healthy to drain!");
@@ -29,13 +20,24 @@ var skills = {
         }
 };
 
+var player = {
+        maxhp: 10,
+        hp: 10,
+        attack: 2,
+        defense: 0,
+        exp: 0,
+        level: 1,
+        skills: [skills.drain]
+};
+$("#hp1").attr("title", "10");
+
 function generateEncounter(monster) {
     encounter.monster = $.extend({}, monster);
 };
 
 function heal(target, quantity) {
     target.hp += quantity;
-    if (target.maxhp > target.hp) {
+    if (target.hp > target.maxhp) {
         target.hp = target.maxhp;
     }
 }
@@ -46,19 +48,23 @@ function clickAttack()
     {
         var playerDamage = calculateDamage(player.attack, encounter.monster.defense);
         encounter.monster.hp -= playerDamage;
+        consoleLog("You bonk the " + encounter.monster.name + " for " + playerDamage + " damage!");
         if(encounter.monster.hp <= 0) {
             endBattle();
         } else {
-            var monsterDamage = calculateDamage(encounter.monster.attack, player.defense);
-            player.hp -= monsterDamage;
-            updateHP();
-            if(player.hp <= 0) {
-                lose();
-            } else {
-                consoleLog("You bonk the " + encounter.monster.name + " for " + playerDamage + " damage!");
-                consoleLog("The " + encounter.monster.name + " " + encounter.monster.verb + " you for " + monsterDamage + " damage!");
-            }
+            monsterTurn(player.defense);
         }
+    }
+};
+
+function monsterTurn(playerDefense)
+{
+    var monsterDamage = calculateDamage(encounter.monster.attack, playerDefense);
+    player.hp -= monsterDamage;
+    updateHP();
+    consoleLog("The " + encounter.monster.name + " " + encounter.monster.verb + " you for " + monsterDamage + " damage!");
+    if(player.hp <= 0) {
+        lose();
     }
 };
 
@@ -66,6 +72,10 @@ function calculateDamage(attack, defense) {
     attackAdjustment = Math.random() + 0.5;
     defenseAdjustment = Math.random() + 0.5;
     attackDamage = attack*attackAdjustment - defense*defenseAdjustment;
+    finalDamage = Math.floor(attackDamage);
+    if (finalDamage < 0) {
+        return 0;
+    }
     return Math.floor(attackDamage);
 };
 
@@ -74,7 +84,13 @@ function clickSkill()
     if (player.skills.length == 0) {
         consoleLog("You don't have any skills yet.");
     } else {
-        //Skill goes here
+        var skill = player.skills[0];
+        skill.effect();
+        if(encounter.monster.hp <= 0) {
+            endBattle();
+        } else {
+            monsterTurn(player.defense);
+        }
     }
 };
 
@@ -82,14 +98,8 @@ function clickDefend()
 {
     if(mode == 'battle')
     {
-        var monsterDamage = calculateDamage(encounter.monster.attack, (player.defense*2)+1);
-        player.hp -= monsterDamage;
-        updateHP();
         consoleLog("You defend!");
-        consoleLog("The " + encounter.monster.name + " " + encounter.monster.verb + " you for " + monsterDamage + " damage!");
-        if(player.hp <= 0) {
-            lose();
-        }
+        monsterTurn((player.defense*2)+1);
     }
 };
 
