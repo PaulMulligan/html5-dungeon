@@ -3,6 +3,7 @@ var encounter = {};
 var skills = {
         drain: {
             name: "Last Breath",
+            id: "drain",
             cost: 0,
             description: "Attempt to heal yourself while striking down an enemy. Only works on weakened foes.",
             effect: function() {
@@ -23,6 +24,8 @@ var skills = {
 var player = {
         maxhp: 10,
         hp: 10,
+        maxsp: 5,
+        sp: 5,
         attack: 2,
         defense: 0,
         exp: 0,
@@ -79,12 +82,28 @@ function calculateDamage(attack, defense) {
     return Math.floor(attackDamage);
 };
 
-function clickSkill()
+function clickSkillMenu()
 {
     if (player.skills.length == 0) {
         consoleLog("You don't have any skills yet.");
     } else {
-        var skill = player.skills[0];
+        $("#skillmenu").toggle();
+    }
+};
+
+function learnSkill(skill)
+{
+    $("#skillmenu").append("<div class='skill' skill='" + skill.id + "'><h3>" + skill.name + " " + skill.cost + "AP</h3><p>" + skill.description +"</p></div>");
+};
+
+function clickSkill(event)
+{
+    if (encounter.monster) {
+        $("#skillmenu").toggle();
+        var skillname = $(event.target).attr('skill');
+        var skill = player.skills[skillname];
+        player.sp -= skill.cost();
+        updateSP();
         skill.effect();
         if(encounter.monster.hp <= 0) {
             endBattle();
@@ -123,6 +142,12 @@ function updateHP() {
     var hpwidth = ((player.hp/player.maxhp)*100) + "%";
     $("#hp1").css("width", hpwidth);
     $("#hp1").attr("title", player.hp);
+};
+
+function updateSP() {
+    var spwidth = ((player.sp/player.maxsp)*100) + "%";
+    $("#mag1").css("width", spwidth);
+    $("#mag").attr("title", player.sp);
 };
 
 function lose()

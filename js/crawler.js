@@ -231,10 +231,12 @@ var render = function () {
 };
 
 $("#attack").click(clickAttack);
-$("#skill").click(clickSkill);
+$("#skill").click(clickSkillMenu);
 $("#defend").click(clickDefend);
 $("#item").click(clickItem);
 $("#flee").click(clickFlee);
+$("#skillmenu").click(clickSkill);
+learnSkill(skills.drain);
 
 function consoleLog(text) {
     $("#console").append("<p>" + text + "</p>");
