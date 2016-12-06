@@ -222,11 +222,18 @@ var render = function () {
     {
         generateEncounter(monsterGenerated);
         monsterGenerated = false;
-        consoleLog("You encountered a " + encounter.monster.name + "!");
+        if (encounter.monsters.length > 1) {
+            consoleLog("A monster jumps out!");
+        } else {
+            consoleLog("Monsters jump out!");
+        }
         lock = true;
-        $("#monster_image").attr("src", encounter.monster.image);
-        $("#monster_image").show();
+        for (var i = 0; i < encounter.monsters.length; i++) {
+            $($("#monster" + i).children()[0]).attr("src", encounter.monsters[i].image);
+            $("#monster" + i).css("display", "inline-block");
+        }
         mode = 'battle';
+        getTurn();
     }
 };
 
@@ -237,6 +244,8 @@ $("#item").click(clickItem);
 $("#flee").click(clickFlee);
 $("#skillmenu").click(clickSkill);
 learnSkill(skills.drain);
+
+$("#monster").click(clickMonster);
 
 function consoleLog(text) {
     $("#console").append("<p>" + text + "</p>");

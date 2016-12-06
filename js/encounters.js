@@ -6,7 +6,10 @@ var slime = {
         defense: 0,
         exp: 1,
         image: './images/goon.png',
-        verb: 'slimes'
+        verb: 'slimes',
+        speed: 10,
+        initiative: 0,
+        modifiers: []
 };
 
 var rat = {
@@ -17,13 +20,16 @@ var rat = {
         defense: 0,
         exp: 2,
         image: './images/goon.png',
-        verb: 'bites'
+        verb: 'bites',
+        speed: 10,
+        initiative: 0,
+        modifiers: []
 };
 
 var encounterTable = {
-        1: [slime, slime, rat]
-}
+        1: [[slime, slime]]
+};
 
 var encounterRate = {
         1: 0.2
-}
+};
