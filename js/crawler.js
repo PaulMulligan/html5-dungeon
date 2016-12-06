@@ -244,6 +244,8 @@ $("#item").click(clickItem);
 $("#flee").click(clickFlee);
 $("#skillmenu").click(clickSkill);
 learnSkill(skills.drain);
+learnSkill(skills.blast);
+learnSkill(skills.focus);
 
 $("#monster").click(clickMonster);
 

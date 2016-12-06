@@ -29,18 +29,31 @@ var skills = {
             id: "blast",
             cost: 5,
             type: "automatic",
-            description: "Strike all foes for significant damage.",
+            description: "Strike all foes with a wave of dark damage.",
             effect: function() {
-                var damage = player.attack/2;
-                if (damage >= encounter.monster.hp) {
-                    encounter.monster.hp = 0;
-                    var healQuantity = Math.floor(encounter.monster.maxhp/2);
-                    heal(player, healQuantity);
-                    consoleLog("You strike with dark magic!");
-                    consoleLog("You are healed for " + healQuantity + " health!");
-                } else {
-                    consoleLog("The enemy is too healthy to drain!");
+                var modUser = applyModifiers(player);
+                for (var i = 0; i < encounter.monsters.length; i++) {
+                    var modTarget = applyModifiers(encounter.monsters[i]);
+                    var damage = calculateDamage(modUser.tec, modTarget.defense);
+                    encounter.monsters[i].hp -= damage;
+                    consoleLog("The " + encounter.monsters[i].name + " is chilled for " + damage + " damage!");
+                    if(encounter.monsters[i].hp <= 0) {
+                        killMonster(i);
+                    }
                 }
+                battleContinue();
+            }
+        },
+        focus: {
+            name: "Focus",
+            id: "focus",
+            cost: 0,
+            type: "automatic",
+            description: "Charge magical energy for next turn",
+            effect: function() {
+                addModifier(player, modifiers.focused, 2);
+                consoleLog(user.name + " focuses...");
+                battleContinue();
             }
         }
 };
@@ -51,7 +64,10 @@ var modifiers = {
         },
         sharp: function(target) {
             target.attack = target.attack*2;
-        }
+        },
+        focused: function(target) {
+            target.tec += 10;
+        } 
 };
 
 var party = [];
@@ -65,10 +81,11 @@ var player1 = {
         attack: 2,
         defense: 0,
         speed: 10,
+        tec: 1,
         exp: 0,
         level: 1,
         initiative: 0,
-        skills: [skills.drain],
+        skills: [skills.drain, skills.blast, skills.focus],
         modifiers: []
 };
 party.push(player1);
