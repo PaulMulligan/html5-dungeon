@@ -1,0 +1,123 @@
+<html>
+	<head>
+		<title>Automatic Dungeon</title>
+		<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+		<link rel="stylesheet" type="text/css" href="css/grind.css" media="screen" />
+	</head>
+	<body>
+		<div id = "top">
+			<label for="gold">Gold</label>
+			<input type="number" name="gold" id="gold" value="0" readonly>
+			<button id="purchaseitem" type="button">Purchase Item for 100 gold</button>
+			<button id="purchasedungeon" type="button">Seek Dungeon for 500 gold</button>
+		</div>
+		<div id = "bottom">
+			<div id = "left">
+				<div id = "hero1" class = "form">
+					<form id = "heroform">
+						<div class = 'col1'>
+							<label for="firstname">Name</label>
+							<input type="text" name="firstname" value="Hero">
+						</div>
+						<div class = 'col2'>
+							<label for="status">Status</label>
+							<input type="text" name="status" id="status" value="Ready" readonly>
+						</div>
+						<div class = 'clear'></div>
+						<div class = 'col1'>
+							<label for="level">Level</label>
+							<input type="text" name="level" value="1" readonly>
+						</div>
+						<div class = 'col2'>
+							<label for="hp">HP</label>
+							<input id='hp' type="text" name="hp" value="20" readonly>
+						</div>
+						<div class = 'clear'></div>
+						<div class = 'col1'>
+							<label for="attack">Attack</label>
+							<input type="text" name="attack" id="attack" value="5" readonly>
+						</div>
+						<div class = 'col2'>
+							<label for="defence">Defence</label>
+							<input type="text" name="defence" id="defence" value="5" readonly>
+						</div>
+						<div class = 'clear'></div>
+						<label for="dungeon">Location</label>
+						<select name="dungeon" id="dungeon">
+							<option value="0">Training fields 1</option>
+						</select>
+						<input type="submit" id="go" value="Go">
+					</form>
+				</div>
+				<div id = "heroequips1" class = "form">
+					<form id = "heroequip">
+						<div class = 'col1'>
+							<label for="firstname">Helmet</label>
+							<select name="helmet" id="helmet">
+								<option value="0">Nothing</option>
+							</select>
+						</div>
+						<div class = 'col2'>
+							<label for="status">Cloak</label>
+							<select name="cloak" id="cloak">
+								<option value="0">Nothing</option>
+							</select>
+						</div>
+						<div class = 'clear'></div>
+						<div class = 'col1'>
+							<label for="level">Chest</label>
+							<select name="chest" id="chest">
+								<option value="0">Nothing</option>
+							</select>
+						</div>
+						<div class = 'col2'>
+							<label for="hp">Pants</label>
+							<select name="pants" id="pants">
+								<option value="0">Nothing</option>
+							</select>
+						</div>
+						<div class = 'clear'></div>
+						<div class = 'col1'>
+							<label for="level">Left Hand</label>
+							<select name="offhand" id="offhand">
+								<option value="0">Nothing</option>
+							</select>
+						</div>
+						<div class = 'col2'>
+							<label for="hp">Right Hand</label>
+							<select name="hand" id="hand">
+								<option value="0">Nothing</option>
+							</select>
+						</div>
+						<div class = 'clear'></div>
+						<div class = 'col1'>
+							<label for="attack">Boots</label>
+							<select name="boots" id="boots">
+								<option value="0">Nothing</option>
+							</select>
+						</div>
+						<div class = 'col2'>
+							<label for="defence">Ring</label>
+							<select name="ring" id="ring">
+								<option value="0">Nothing</option>
+							</select>
+						</div>
+						<div class = 'clear'></div>
+						<input type="submit" value="Equip">
+					</form>
+				</div>
+			</div>
+			<div id = "right">
+				<div id = "dungeon1">
+					<div id = "battle">
+						<div id = "good"></div>
+						<div id = "evil"></div>
+					</div>
+					<div id = "console"></div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">google.load("jquery", "1.3.2");</script>
+		<script src='./js/grind.js'></script>
+	</body>
+</html>
