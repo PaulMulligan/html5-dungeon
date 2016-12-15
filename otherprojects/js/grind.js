@@ -1,8 +1,8 @@
 $(document).ready(function() {
     var names = {
         monster: {
-            prefix: ['a cardboard', 'a wooden', 'a metallic', 'a robotic', 'a lizardy', 'a demonic', 'a slanderous', 'a rude', 'a charming', 'a furry', 'a slimy', 'a vicious', 'a deadly', 'a nasty', 'a frumious', 'an evil', 'an atrocious', 'an unsettling', 'a ludicrous', 'a gigantic', 'a tiny', 'an inanimate', 'a hazardous', 'a futuristic', 'a medieval', 'a half'],
-            type: ['box', 'rat', 'slime', 'kobold', 'crate', 'barrel', 'spider', 'newt', 'imp', 'golem', 'gnoll', 'dragon', 'demon', 'warrior', 'mage', 'archer', 'sorceror', 'bandit', 'elf', 'werewolf', 'snake', 'tentacle', 'bouncy ball', 'washing machine', 'crumpet', 'baseball pitcher', 'chef', 'patissiere', 'software developer', 'management consultant', 'lawyer', 'robot', 'ghost', 'zombie']
+            prefix: ['a handsome', 'a shady', 'a boisterous', 'a cardboard', 'a wooden', 'a metallic', 'a robotic', 'a lizardy', 'a demonic', 'a slanderous', 'a rude', 'a charming', 'a furry', 'a slimy', 'a vicious', 'a deadly', 'a nasty', 'a frumious', 'an evil', 'an atrocious', 'an unsettling', 'a ludicrous', 'a gigantic', 'a tiny', 'an inanimate', 'a hazardous', 'a futuristic', 'a medieval', 'a half'],
+            type: ['duke', 'farmer', 'peasant', 'box', 'rat', 'slime', 'kobold', 'crate', 'barrel', 'spider', 'newt', 'imp', 'golem', 'gnoll', 'dragon', 'demon', 'warrior', 'mage', 'archer', 'sorceror', 'bandit', 'elf', 'werewolf', 'snake', 'tentacle', 'bouncy ball', 'washing machine', 'crumpet', 'baseball pitcher', 'chef', 'patissiere', 'software developer', 'management consultant', 'lawyer', 'robot', 'ghost', 'zombie']
         },
         helmet: ['Saucepan', 'Colander', 'Beret', 'Hat', 'Helmet', 'Beanie', 'Headphone Set', 'Cat Ears', 'Wizard Cap', 'Dunce Cap', 'Bowl of Spaghetti', 'Parrot', 'Glasses', 'Goggles', 'Tiny Bathtub', 'Clown Nose', 'Moustache'],
         cloak: ['Curtain', 'Bedsheet', 'Cape', 'Cloak', 'Duster', 'Carpet', 'Magic Carpet', 'Scarf', 'Christmas Scarf', 'Pauldrons', 'Shoulder Pads', 'Necklace', 'Choker', 'Live Ferret'],
@@ -33,6 +33,7 @@ $(document).ready(function() {
         defence: 0
     }];
     
+    var dungeonNames = ['Training Field'];
     var dungeons = [1];
     
     var shopFailureMessages = ['The shopkeeper falls asleep while you are purchasing. Try again later', 
@@ -77,6 +78,7 @@ $(document).ready(function() {
         if (dungeons.includes(level)) {
             return true;
         } else {
+            dungeonNames.push(name);
             var index = dungeons.push(level) -1;
             $('#dungeon').append('<option value="' + index + '">' + name + ' ' + level + '</option>');
             consoleLog('Discovered a ' + name);
@@ -352,7 +354,19 @@ $(document).ready(function() {
                         levelUp();
                         
                         $('#finalchallenge').hide();
+                        finalConsoleLog('When all seems hopeless, you use the skills you learned in your quest! ' + heroSkills + '! The Dark Lord cannot stand against such might!');
                         finalConsoleLog('The Dark Lord is finally defeated! Goodness triumphs once again. Hooray for the great hero, ' + hero.firstname + '!');
+                        if (currentPlot == 'macguffin') {
+                            updatePlot(`The Dark Lord is defeated! You have retrieved the ${macguffin} and averted the ${doom1} of ${doom2}! Hooray for the great hero!`);
+                        } else if (currentPlot == 'kidnapping') {
+                            updatePlot(`The Dark Lord is defeated! You have rescued the ${macperson} and averted the ${doom1} of ${doom2}! Hooray for the great hero!`);
+                        } else if (currentPlot == 'revenge') {
+                            updatePlot(`The Dark Lord is defeated! Victory is yours, and the ${townType} of ${townName} has been avenged! Hooray for the great hero!`);
+                        } else if (currentPlot == 'love') {
+                            updatePlot(`The Dark Lord is defeated! The ${macperson} finally sees the power of your love and embraces you! Hooray for the great hero!`);
+                        } else if (currentPlot == 'greatness') {
+                            updatePlot(`The Dark Lord is defeated! You have proven yourself to be the greatest warrior to ever have lived! Hooray for the great hero!`);
+                        }
                         heroStatus = 'ready';
                         setTimeout(function() {
                             doConfetti(0);
@@ -387,7 +401,7 @@ $(document).ready(function() {
     
     function killHero(hero, monster) {
         $('#evil').css('right', '-15px');
-        consoleLog(monster.name + ' defeated ' + hero.firstname + '!');
+        consoleLog(hero.firstname + ' was defeated by ' + monster.name + '!');
         consoleLog(hero.firstname + ' limps home...');
         $('#status').val('Injured');
         heroStatus = 'injured';
@@ -441,6 +455,13 @@ $(document).ready(function() {
             if (Math.random() < 1/20) {
                 generateDungeon(getLevel(hero))
             }
+            if (Math.random() < 1/20) {
+                doEncounter();
+            }
+            if (Math.random() < 1/20) {
+                obtainQuest();
+            }
+            resolvePlot(monster.exp);
             baseHero.exp += monster.exp;
             levelUp();
             initBattle();
@@ -492,6 +513,177 @@ $(document).ready(function() {
     function finalConsoleLog(text) {
         $("#console2").append(text + "<br/>");
         $("#console2").scrollTop($("#console2")[0].scrollHeight);
+    };
+    
+    function updatePlot(text) {
+        $("#console3").append(text + "<br/>");
+        $("#console3").scrollTop($("#console3")[0].scrollHeight);
+    };
+    
+    function addSkill(text) {
+        $("#console4").append(text + "<br/>");
+        $("#console4").scrollTop($("#console4")[0].scrollHeight);
+    };
+    
+    var speciesArray = ['lizard person', 'human', 'grey elf', 'dwarf', 'dog', 'halfling', 'robot', 'lawyer', 'software developer', 'half-dragon', 'half-elf', 'half-dwarf', 'vampire', 'zombie', 'werewolf', 'troll', 'gnome', 'spoonbender', 'lion tamer'];
+    var species = getRandom(speciesArray);
+    var townAdjectiveArray = ['sandy', 'floating', 'sunken', 'lost', 'hidden', 'perpetually on-fire', 'rainy', 'flooded', 'wandering', 'moving', 'spinning', 'temperate'];
+    var townAdjective = getRandom(townAdjectiveArray);
+    var townTypeArray = ['town', 'city', 'hamlet', 'village', 'forest', 'tower block', 'castle', 'pirate ship', 'island', 'swamp', 'mountain', 'dwarfhome', 'nest'];
+    var townType = getRandom(townTypeArray);
+    var townNameArray = ['Splurgenhein', 'Jurgenfen', 'Crossfell', 'Kirkwent', 'Splantchen', 'Crosstop', 'Kirfenfell', 'Jirninden', 'Gosfield', 'Entfield', 'Bloodpool', 'Mudpool'];
+    var townName = getRandom(townNameArray);
+    var townMoodArray = ['jolly', 'sinister', 'rainy', 'foggy', 'mysterious', 'forgotten', 'mystical', 'beautiful', 'convoluted', 'poorly-written', 'suspicious', 'lovely'];
+    var adventureType = getRandom(townMoodArray);
+    var townMood = getRandom(townMoodArray);
+    var macGuffin1s = ['Orb', 'Chest', 'Amulet', 'Ring', 'Sword', 'Calculator', 'Toaster', 'Book', 'Magazine', 'Gun', 'Puppy', 'Dragon', 'Tax Return', 'Monocle'];
+    var macGuffin2s = ['of Spheres', 'del Sol', 'of Cats', 'Dolorous', 'Unspeakable', 'of Burning', 'of Glitter', 'that Sings', 'that Dances', 'that Plays Sudoku'];
+    var macguffin = getRandom(macGuffin1s) + " " + getRandom(macGuffin2s);
+    var macPersons1 = ['Handsome', 'Snotty', 'Rude', 'Dignified', 'Pretty', 'Rich', 'Fabulous', 'Unspeakable', 'Chubby', 'Buxom', 'Fashionable', 'Socialist', 'Exploding'];
+    var macPersons2 = ['Duke', 'Princess', 'Queen', 'King', 'Earl', 'Count', 'Countess', 'Contessa', 'Monumental', 'Captain', 'Wizard', 'Witch', 'Sorceress', 'Jester', 'Knight', 'Adventurer', 'Bandit'];
+    var macperson = getRandom(macPersons1) + " " + getRandom(macPersons2);
+    var doom1s = ['Rain', 'Doom', 'Fire', 'Collapse', 'Chasm', 'Vortex', 'Tsunami', 'Hurricane', 'Audit', 'Review', 'Form', 'Army', 'Gestalt', 'Window', 'Orchestra'];
+    var doom1 = getRandom(doom1s);
+    var doom2s = ['Squirrels', 'Balls', 'Dragons', 'Doom', 'Destruction', 'Explosions', 'Witches', 'the Living', 'the Lost', 'the Meek', 'Grass', 'Trees', 'Shattering'];
+    var doom2 = getRandom(doom2s);
+    var darkLands = ['Swamp of Misery', 'Dolorous Island', 'Island in the Sky', 'Chasm of Spikes', 'Forest of Doors', 'Belly of the Giant Rabbit', 'Airport of Queues'];
+    var darkLand = getRandom(darkLands);
+    var plotDevice = '';
+    var plots = ['macguffin', 'kidnapping', 'revenge', 'love', 'greatness'];
+    var starters = [`You are a ${species} from the ${townAdjective} ${townType} of ${townName}. It was a ${townMood} place.`,
+                    `You were abandoned in the ${townAdjective} ${townType} of ${townName} as a baby. For a ${species} like you, it was a ${townMood} place.`,
+                    `As a ${species}, you never liked the ${townAdjective} ${townType} of ${townName}, because it was a ${townMood} place.`];
+    var macguffinPlot = [`But everything changed when the Dark Lord stole the ${macguffin}! Without it, the ${doom1} of ${doom2} would destroy everything!`,
+                         `Then one day, the ${macguffin} disappeared! Surely the Dark Lord used the ${doom1} of ${doom2} to take it!`,
+                         `Life was protected by the ${macguffin}, but then the Dark Lord stole it to bring about the ${doom1} of ${doom2}!`];
+    var kidnappingPlot = [`But then the Dark Lord kidnapped the ${macperson}! Without their protection, surely the ${doom1} of ${doom2} would come!`,
+                          `The leader, the ${macperson} kept the ${townType} safe...until the Dark Lord kidnapped them! Now the ${doom1} of ${doom2} will come!`,
+                          `The Dark Lord was entranced by the beauty of the ${macperson}, and stole them away! Now the king has threatened the ${townType} with the ${doom1} of ${doom2}!`];
+    var revengePlot = [`But everything changed when the ${doom1} of ${doom2} controlled by the Dark Lord burned your home to the ground! Now, you have sworn revenge!`,
+                       `Until the Dark Lord summoned the ${doom1} of ${doom2}, destroying your home utterly! You will not rest without revenge!`,
+                       `There, the ${doom1} of ${doom2} was sealed, until the Dark Lord released it and destroyed everything! You must get revenge!`];
+    var lovePlot = [`But then your love, the ${macperson} was corrupted by the ${doom1} of ${doom2} and became the Dark Lord! You have sworn to rescue them!`,
+                    `You fell in love with the ${macperson} until you discovered they were secretly the Dark Lord! You must bring them to the side of good!`,
+                    `You hated it there, so you secretly loved the Dark Lord, the ${macperson}. Only by defeating them and will they see your love!`];
+    var greatnessPlot = [`But everything was intensely dull so you decided to obtain fame with the ${doom1} of ${doom2} by defeating the legendary Dark Lord!`,
+                         `To prove yourself the best, you decided to seek the ${doom1} of ${doom2} which was controlled by the legendary Dark Lord!`,
+                         `Everyone said you would never amount to anything, but you will prove them wrong when you defeat the legendary Dark Lord!`];
+    var enders = [`Now you must journey to the castle of the Dark Lord in the distant ${darkLand}. Your ${adventureType} adventure awaits!`,
+                  `It will take much training before you can challenge the Dark Lord in ${darkLand}. Your ${adventureType} adventure awaits!`,
+                  `Soon the ${darkLand} where the Dark Lord waits will fall to your might! Your ${adventureType} adventure awaits!`];
+    var currentPlot = 'macguffin';
+    
+    function generatePlot() {
+        var plot = "";
+        var starter = getRandom(starters);
+        plot += starter;
+        var plotType = getRandom(plots);
+        currentPlot = plotType; 
+        if (plotType == 'macguffin') {
+            plotDevice = macguffin;
+            var plotMiddle = getRandom(macguffinPlot);
+            plot += (" " + plotMiddle);
+        } else if (plotType == 'kidnapping') {
+            plotDevice = macperson;
+            var plotMiddle = getRandom(kidnappingPlot);
+            plot += (" " + plotMiddle);
+        } else if (plotType == 'revenge') {
+            var plotMiddle = getRandom(revengePlot);
+            plot += (" " + plotMiddle);
+        } else if (plotType == 'love') {
+            plotDevice = macperson;
+            var plotMiddle = getRandom(lovePlot);
+            plot += (" " + plotMiddle);
+        } else if (plotType == 'greatness') {
+            var plotMiddle = getRandom(greatnessPlot);
+            plot += (" " + plotMiddle);
+        }
+        var ending = getRandom(enders);
+        plot += (" " + ending);
+        updatePlot(plot);
+    };
+    
+    generatePlot();
+    
+    var objects = ['tree', 'chest', 'boulder', 'painting', 'large anvil', 'skeleton', 'bookshelf', 'wardrobe', 'giant skull', 'maypole', 'rubix cube'];
+    
+    function doEncounter() {
+        var location = getRandom(names.dungeon.type);
+        var person = getRandom(macPersons2);
+        var monster = getRandom(names.monster.type);
+        var item = getRandom(names.hand);
+        var mood = getRandom(townMoodArray);
+        var object = getRandom(objects);
+        var encounters = [`You find the corpse of a ${person} at the bottom of a ${location}. How sad.`,
+                          `In a ${object}, you find a stuck ${item}, but it is too difficult to pull free, so you leave it alone`,
+                          `A talking ${object} draws your attention. At first you listen, but it is very boring.`,
+                          `You rescue a ${monster} who was stuck in a trap, and they run away quickly`,
+                          `You pause a moment to reflect on the ${mood} nature of existence, and almost walk into a {$object}`,
+                          `You become lost in a ${location}. By the time you get out, you feel very ${mood}`];
+        updatePlot(getRandom(encounters));
+        if (Math.random() < 0.5) {
+            var randomGold = Math.floor(Math.random()*(50 * baseHero.level)+baseHero.level);
+            var currentGold = parseInt($('#gold').val());
+            $('#gold').val(currentGold + randomGold);
+            updatePlot("You do find " + randomGold + " gold though.");
+        }
+    };
+    
+    var activeQuests = [];
+    var skills = ['Punctuality', 'Singing', 'Snooker', 'Bowling', 'Grooming', 'Lawn Maintenance', 'Tickling', 'Weighing', 'Perfect Pitch', 'Handwriting', 'Criminal Profiling', 'Archiving', 'Reading Sheet Music'];
+    var heroSkills = [];
+    
+    function obtainQuest() {
+        var mac = getRandom(macGuffin1s);
+        var questGiver = getRandom(macPersons2);
+        var dungeon = getRandom(dungeonNames);
+        var quests = [`A ${questGiver} promises you a great reward if you recover their ${mac} from the ${dungeon}`,
+                      `You meet a beautiful ${questGiver} who begs you to find the ${mac} they lost in the ${dungeon}`,
+                      `On the grave of a ${questGiver} a ghost appears and begs to be reunited with their ${mac} lost in the ${dungeon}.`,
+                      `A wandering ${questGiver} says they will pay you to find them the ${mac} hidden in the ${dungeon}`,
+                      `A mysterious ${questGiver} tells you there is a reward for any who can get the ${mac} from the ${dungeon}`,
+                      `A ${questGiver} trapped in a mirror tells you that only the ${mac} in the ${dungeon} can free them`,
+                      `A ${questGiver} tells you that only the ${mac} from the ${dungeon} can heal their terrible curse`,
+                      `You receive a homing pigeon from a ${questGiver} asking for you to get the ${mac} from the ${dungeon}`,
+                      `A ${questGiver} challenges you to prove your strength by obtaining the ${mac} from the ${dungeon}`,
+                      `A ${questGiver} claims to have fallen in love with the ${mac} from the ${dungeon}`];
+        updatePlot(getRandom(quests));
+        activeQuests.push({mac: mac, questGiver: questGiver, dungeon: dungeon, active: true});
+    };
+    
+    function resolvePlot(level) {
+        for (var i = 0; i < activeQuests.length; i++) {
+            var quest = activeQuests[i];
+            if (quest.active && dungeonNames.indexOf(quest.dungeon) == dungeons.indexOf(level)) {
+                if (Math.random() < 0.2) {
+                    quest.active = false;
+                    updatePlot(`You find the ${quest.mac}! You return it to the ${quest.questGiver}`);
+                    var rewardType = Math.random();
+                    if (rewardType < 0.3) {
+                        if (Math.random < 0.5) {
+                            var currentAttack = parseInt($('#attack').val());
+                            $('#attack').val(currentAttack + 1);
+                            updatePlot(`They can give you no reward, but this quest makes you feel stronger!`);
+                        } else {
+                            var currentDefence = parseInt($('#defence').val());
+                            $('#defence').val(currentDefence + 1);
+                            updatePlot(`They can give you no reward, but this quest makes you feel more durable!`);
+                        }
+                    } else if (rewardType < 0.6) {
+                        var moneyEarned = Math.floor((Math.random()+Math.random()+Math.random())*(50 * baseHero.level));
+                        var currentGold = parseInt($('#gold').val());
+                        $('#gold').val(currentGold + moneyEarned);
+                        updatePlot(`They reward you with ${moneyEarned} gold!`);
+                    } else {
+                        var randomSkill = getRandom(skills);
+                        heroSkills.push(randomSkill);
+                        addSkill(randomSkill);
+                        updatePlot(`As a reward, they teach you a rank in the skill of ${randomSkill}!`);
+                    }
+                    break;
+                }
+            }
+        };
     };
     
     function generateFloatingNumber(number, left, top) {

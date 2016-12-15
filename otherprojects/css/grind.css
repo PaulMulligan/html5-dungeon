@@ -49,6 +49,7 @@ body
 	padding: 10px;
 	float: left;
 	margin: 5px;
+	font-size: 0.9em;
 }
 .battle
 {
@@ -98,4 +99,16 @@ body
 	position: absolute;
 	width: 10px;
 	height: 10px;
+}
+#plotbox
+{
+	height: 176px;
+}
+#plotbox .console
+{
+	height: 160px;
+}
+#skills
+{
+	width: 600px;
 }
